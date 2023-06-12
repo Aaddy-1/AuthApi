@@ -8,15 +8,20 @@ import org.springframework.stereotype.Service;
 
 import com.example.authapi.DataAccessLayer.DataAccessService;
 import com.example.authapi.model.User;
+import com.example.authapi.security.jwtService;
 
 @Service
 public class UserService {
 
     DataAccessService db;
+    jwtService tokenService;
+
     @Autowired
-    public UserService(DataAccessService db) {
+    public UserService(DataAccessService db, jwtService tokenService) {
         this.db = db;
+        this.tokenService = tokenService;
     } 
+
 
     public String addUser(User newUser) {
 
@@ -26,28 +31,31 @@ public class UserService {
             return "Unable to add user";
         }
 
-        
+        db.addUser(newUser);
 
-
-        return "User Succesfully added";
+        String jwtToken = tokenService.generateToken(newUser);
+        return "User Succesfully added\n + Your jwt token is: " + jwtToken;
+        // return "User succesfully added";
 
     }
 
-    public String getUsers() {
+    public List<User> getUsers() {
 
         List<User> users = db.getUsers();
         String outputString = "";
 
-        if (users.size() == 0) {
-            return "No users in the database";
-        }
+        // if (users.size() == 0) {
+        //     return "No users in the database";
+        // }
 
-        for (int i  = 0; i < users.size(); i++) {
-            outputString += users.get(i).toString();
-            outputString += "\n";
-        }
+        // for (int i  = 0; i < users.size(); i++) {
+        //     outputString += users.get(i).toString();
+        //     outputString += "\n";
+        // }
 
-        return outputString;
+        // return outputString;
+
+        return users;
 
     }
 

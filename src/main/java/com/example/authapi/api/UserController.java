@@ -1,5 +1,7 @@
 package com.example.authapi.api;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,11 +24,11 @@ public class UserController {
     }
 
     @GetMapping
-    public String getUsers() {
+    public List<User> getUsers() {
         return service.getUsers();
     }
 
-    @PostMapping
+    @PostMapping(path = "/signup")
     public String addUser(@RequestBody User newUser) {
         return service.addUser(newUser);
     }
